@@ -31,22 +31,22 @@ class CinemaHall(models.Model):
     rows = models.IntegerField()
     seats_in_row = models.IntegerField()
 
-    def __str__(self) -> str:
-        return self.name
-
     @property
     def capacity(self) -> int:
-        return self.rows * self.seats_in_row
+        seats = self.seats_in_row * self.rows
+        return seats
+
+    def __str__(self) -> str:
+        return f"{self.name}"
 
 
 class MovieSession(models.Model):
     show_time = models.DateTimeField()
-    cinema_hall = models.ForeignKey(
-        CinemaHall, on_delete=models.CASCADE, related_name="movie_sessions"
-    )
-    movie = models.ForeignKey(
-        Movie, on_delete=models.CASCADE, related_name="movie_sessions"
-    )
+    cinema_hall = models.ForeignKey(CinemaHall,
+                                    on_delete=models.CASCADE,
+                                    related_name="movie_sessions")
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE,
+                              related_name="movie_sessions")
 
     def __str__(self) -> str:
-        return f"{self.movie.title} {self.show_time}"
+        return f"{self.movie} {self.show_time}"
